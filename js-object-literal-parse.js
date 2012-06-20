@@ -1,6 +1,6 @@
 // Javascript object literal parser
 // Splits an object literal string into a set of top-level key-value pairs
-// (c) Michael Best
+// (c) Michael Best (https://github.com/mbest)
 // License: MIT (http://www.opensource.org/licenses/mit-license.php)
 // Version 1.0.0
 

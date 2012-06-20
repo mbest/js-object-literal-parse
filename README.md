@@ -7,7 +7,7 @@ Exports a single function, `parseObjectLiteral(str)` that accepts an object lite
 
 Notes: This parser is more lenient than a standard JavaScript parser, accepting unquoted keys with special characters and accepting keys without a value. It also silently ignores errors such as a missing key (the value will be skipped). If a value expression contains unquoted spaces, they may be stripped in the result.
 
-Acknowledgments: This parser's functionality is based on the parser included in [Knockout](http://knockoutjs.com/) by Steven Sanderson. The examples below are also based on the specs in Knockout. This parser's implementation is inspired by [json-sans-eval](http://code.google.com/p/json-sans-eval/) by Mike Samuel.
+Acknowledgments: This parser's functionality is based on the parser included in [Knockout](http://knockoutjs.com/) by Steven Sanderson. The examples below are also based on the specs in Knockout. This parser's implementation is inspired by [json-sans-eval](http://code.google.com/p/json-sans-eval/) by Mike Samuel. Compared the the Knockout parser, this one is smaller and about twice a fast.
 
 ### Examples
 
@@ -71,7 +71,7 @@ Acknowledgments: This parser's functionality is based on the parser included in 
     ```
 
     ```
-    [ ["a.b","1"], ["b+c","2"], ["c=d","3"], ["d_e","4"] ] 
+    [ ["a.b","1"], ["b+c","2"], ["c=d","3"], ["d_e","4"] ]
     ```
 
 * Keys without values, values without keys, etc.

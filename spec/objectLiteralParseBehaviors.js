@@ -22,7 +22,7 @@ describe('Object Literal Parse', {
     },
 
     'Should be able to parse object literals containing string literals': function() {
-        var result = parseObjectLiteral("a: \"comma, colon: brace{ bracket[ apos' escapedQuot\\\" end\", b: 'escapedApos\\\' brace} bracket] quot\"'");
+        var result = parseObjectLiteral("a: \"comma, colon: brace{ bracket[ apos' escapedQuot\\\" end\", b: 'escapedApos\\' brace} bracket] quot\"'");
         value_of(result.length).should_be(2);
         value_of(result[0][0]).should_be("a");
         value_of(result[0][1]).should_be("\"comma, colon: brace{ bracket[ apos' escapedQuot\\\" end\"");
@@ -33,9 +33,9 @@ describe('Object Literal Parse', {
     'Should be able to parse object literals containing child objects, arrays, function literals, and newlines': function() {
         // The parsing may or may not keep unnecessary spaces. So to avoid confusion, avoid unnecessary spaces.
         var result = parseObjectLiteral(
-            "myObject:{someChild:{},someChildArray:[1,2,3],\"quotedChildProp\":'string value'},\n"
+            "myObject:{someChild:{}, someChildArray:[1,2,3], \"quotedChildProp\":'string value'},\n"
           + "someFn:function(a,b,c){var regex=/}/g;var str='/})({';return{};},"
-          + "myArray:[{},function(){},\"my'Str\",'my\"Str']"
+          + "myArray:[{}, function(){}, \"my'Str\", 'my\"Str']"
         );
         value_of(result.length).should_be(3);
         value_of(result[0][0]).should_be("myObject");
@@ -44,6 +44,19 @@ describe('Object Literal Parse', {
         value_of(result[1][1]).should_be("function(a,b,c){var regex=/}/g;var str='/})({';return{};}");
         value_of(result[2][0]).should_be("myArray");
         value_of(result[2][1]).should_be("[{},function(){},\"my'Str\",'my\"Str']");
+    },
+
+    'Should be able to parse unquoted keys with some special characters': function() {
+        var result = parseObjectLiteral("a.b: 1, b+c: 2, c=d: 3, d_e: 4");
+        value_of(result.length).should_be(4);
+        value_of(result[0][0]).should_be("a.b");
+        value_of(result[0][1]).should_be("1");
+        value_of(result[1][0]).should_be("b+c");
+        value_of(result[1][1]).should_be("2");
+        value_of(result[2][0]).should_be("c=d");
+        value_of(result[2][1]).should_be("3");
+        value_of(result[3][0]).should_be("d_e");
+        value_of(result[3][1]).should_be("4");
     },
 
     'Should be able to cope with malformed syntax (things that aren\'t key-value pairs)': function() {
