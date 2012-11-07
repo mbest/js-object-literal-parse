@@ -4,7 +4,22 @@
 // License: MIT (http://www.opensource.org/licenses/mit-license.php)
 // Version 1.0.0
 
-var parseObjectLiteral = (function(undefined) {
+// https://github.com/umdjs/umd
+// Support AMD, Node.js, and globals
+;(function (root, factory) {
+    if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like enviroments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(factory);
+    } else {
+        // Browser globals (root is window)
+        root.parseObjectLiteral = factory();
+  }
+}(this, function(undefined) {
     // This parser is inspired by json-sans-eval by Mike Samuel (http://code.google.com/p/json-sans-eval/)
 
     // Match strings with either single or double quotes
@@ -85,4 +100,4 @@ var parseObjectLiteral = (function(undefined) {
         }
         return result;
     }
-})();
+}));
