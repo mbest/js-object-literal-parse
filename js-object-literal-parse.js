@@ -2,40 +2,41 @@
 // Splits an object literal string into a set of top-level key-value pairs
 // (c) Michael Best (https://github.com/mbest)
 // License: MIT (http://www.opensource.org/licenses/mit-license.php)
-// Version 2.0.0
+// Version 2.0.1
 
 var parseObjectLiteral = (function(undefined) {
     // This parser is inspired by json-sans-eval by Mike Samuel (http://code.google.com/p/json-sans-eval/)
 
         // These two match strings, either with double quotes or single quotes
-    var stringDouble = '(?:"(?:[^"\\\\]|\\\\.)*")',
-        stringSingle = "(?:'(?:[^'\\\\]|\\\\.)*')",
-        // Matches a regular expression (text enclosed by slashes), but will also erroneously match sets
-        // of divisions as a regular expression.
-        stringRegexp = '(?:/(?:[^/\\\\]|\\\\.)*/\w*)',
+    var stringDouble = '"(?:[^"\\\\]|\\\\.)*"',
+        stringSingle = "'(?:[^'\\\\]|\\\\.)*'",
+        // Matches a regular expression (text enclosed by slashes), but will also match sets of divisions
+        // as a regular expression (this is handled by the parsing loop below).
+        stringRegexp = '/(?:[^/\\\\]|\\\\.)*/\w*',
         // These characters have special meaning to the parser and must not appear in the middle of a
         // token, except as part of a string.
         specials = ',"\'{}()/:[\\]',
         // Match text (at least two characters) that does not contain any of the above special characters,
         // although some of the special characters are allowed to start it (all but the colon and comma).
         // The text can contain spaces, but leading or trailing spaces are skipped.
-        everyThingElse = '(?:[^\\s:,/][^' + specials + ']*[^\\s' + specials + '])',
+        everyThingElse = '[^\\s:,/][^' + specials + ']*[^\\s' + specials + ']',
         // Match any non-space character not matched already. This will match colons and commas, since they're
         // not matched by "everyThingElse", but will also match any other single character that wasn't already
         // matched (for example: in "a: 1, b: 2", each of the non-space characters will be matched by oneNotSpace).
         oneNotSpace = '[^\\s]',
+
         // Create the actual regular expression by or-ing the above strings. The order is important.
-        token = RegExp('(?:' + stringDouble + '|' + stringSingle + '|' + stringRegexp + '|' + everyThingElse + '|' + oneNotSpace + ')', 'g'),
-        // Match end of previous token to determine whether a slash is division or regex
+        token = RegExp(stringDouble + '|' + stringSingle + '|' + stringRegexp + '|' + everyThingElse + '|' + oneNotSpace, 'g'),
+
+        // Match end of previous token to determine whether a slash is a division or regex.
         divisionLookBehind = /[\])A-Za-z0-9_$]$/;
         keywordRegexLookBehind = /(in|return|typeof)$/;
 
-    var nativeTrim = String.prototype.trim;
-    function trim(str) {
-        return str == null ? ""
-            : nativeTrim
-                ? nativeTrim.call(str)
-                : str.toString().replace(/^\s+/, '').replace(/\s+$/, '');
+    function trim(string) {
+        return string == null ? '' :
+            string.trim ?
+                string.trim() :
+                string.toString().replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
     }
 
     return function(objectLiteralString) {
@@ -71,13 +72,14 @@ var parseObjectLiteral = (function(undefined) {
                         continue;
                 // A set of slashes is initially matched as a regular expression, but could be division
                 } else if (c === 47 && i && tok.length > 1) {  // "/"
-                    // look at the end of the previous token to determine if the slash is actually division
+                    // Look at the end of the previous token to determine if the slash is actually division
                     if (divisionLookBehind.test(toks[i-1]) && !keywordRegexLookBehind.test(toks[i-1])) {
                         // The slash is actually a division punctuator; re-parse the remainder of the string (not including the slash)
-                        toks = str.substr(str.indexOf(tok)+1).match(token);
+                        str = str.substr(str.indexOf(tok) + 1);
+                        toks = str.match(token);
                         toks.push(',');
                         i = -1;
-                        // continue with just the slash
+                        // Continue with just the slash
                         tok = '/';
                     }
                 // Increment depth for parentheses, braces, and brackets so that interior commas are ignored

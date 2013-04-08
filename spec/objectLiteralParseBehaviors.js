@@ -42,6 +42,16 @@ describe('Object Literal Parse', {
         var result = parseObjectLiteral("div: null/0, regexpFunc: function(){var regex=/{/g;return /123/;}");
         value_of(result).should_be([["div", "null/0"], ["regexpFunc", "function(){var regex=/{/g;return/123/;}"]]);
     },
+
+    'Should be able to correctly parse slashes in certain problem cases when parentheses are used': function() {
+        var result = parseObjectLiteral("a: (function() {}) / 1, b: function () { if (true) (/ abc /).test('123'); }, c: function () { throw (/ xyz /); }");
+        value_of(result).should_be([
+            ["a", "(function(){})/1"],
+            ["b", "function(){ if(true)(/ abc /).test('123');}"],
+            ["c", "function(){ throw(/ xyz /);}"]
+        ]);
+    },
+
     'Should be able to parse unquoted keys with some special characters': function() {
         var result = parseObjectLiteral("a.b: 1, b+c: 2, c=d: 3, d_e: 4");
         value_of(result).should_be([["a.b", "1"], ["b+c", "2"], ["c=d", "3"], ["d_e", "4"]]);
