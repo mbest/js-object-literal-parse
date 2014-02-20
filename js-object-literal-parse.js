@@ -44,7 +44,7 @@
         token = RegExp(stringDouble + '|' + stringSingle + '|' + stringRegexp + '|' + everyThingElse + '|' + oneNotSpace, 'g'),
 
         // Match end of previous token to determine whether a slash is a division or regex.
-        divisionLookBehind = /[\])A-Za-z0-9_$]$/;
+        divisionLookBehind = /[\])A-Za-z0-9_$]$/,
         keywordRegexLookBehind = /(in|return|typeof)$/;
 
     function trim(string) {
