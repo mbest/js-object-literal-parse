@@ -3,6 +3,8 @@
 ##### _Splits an object literal string into a set of top-level key-value pairs._
 By [Michael Best](https://github.com/mbest)
 
+**License:** MIT (http://www.opensource.org/licenses/mit-license.php)
+
 Exports a single function, `parseObjectLiteral(str)` that accepts an object literal string (with or without enclosing braces) and returns an array of key-value string pairs. The key are strings, but unquoted keys are accepted as long as they don't contain these special characters: `,:()[]{}'"/`. The value is any valid Javascript expression; the parser will return it as a string (without evaluating it).
 
 Notes: This parser is more lenient than a standard JavaScript parser, accepting unquoted keys with special characters and accepting keys without a value. It also silently ignores errors such as a missing key (the value will be skipped). If a value expression contains unquoted spaces, they may be stripped in the result.
