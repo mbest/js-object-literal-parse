@@ -2,7 +2,7 @@
 // Splits an object literal string into a set of top-level key-value pairs
 // (c) Michael Best (https://github.com/mbest)
 // License: MIT (http://www.opensource.org/licenses/mit-license.php)
-// Version 2.0.1
+// Version 2.0.2
 
 // https://github.com/umdjs/umd
 // Support AMD, Node.js, and globals
