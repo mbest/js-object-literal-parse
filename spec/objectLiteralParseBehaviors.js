@@ -57,9 +57,20 @@ describe('Object Literal Parse', {
         value_of(result).should_be([["a.b", "1"], ["b+c", "2"], ["c=d", "3"], ["d_e", "4"]]);
     },
 
+    'Should parse a value that begins with a colon': function() {
+        var result = parseObjectLiteral("a: :-)");
+        value_of(result).should_be([["a", ":-)"]]);
+    },
+
     'Should be able to cope with malformed syntax (things that aren\'t key-value pairs)': function() {
-        var result = parseObjectLiteral("malformed1, 'mal:formed2', good:3, { malformed: 4 }, good5:5");
-        // "{ malformed: 4 }" get's skipped because there's no valid key value
-        value_of(result).should_be([["malformed1", undefined], ["mal:formed2", undefined], ["good", "3"], ["good5", "5"]]);
+        var result = parseObjectLiteral("malformed1, 'mal:formed2', good:3, {malformed:4}, good5:5, keyonly:");
+        value_of(result).should_be([
+            ["malformed1", undefined],
+            ["mal:formed2", undefined],
+            ["good", "3"],
+            [undefined, "{malformed:4}"],
+            ["good5", "5"],
+            ["keyonly", undefined]
+        ]);
     }
 });

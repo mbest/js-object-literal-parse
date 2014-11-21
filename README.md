@@ -79,9 +79,9 @@ Acknowledgments: This parser's functionality is based on the parser included in 
 * Keys without values, values without keys, etc.
 
     ```
-    parseObjectLiteral("malformed1, 'mal:formed2', good:3, { malformed: 4 }, good5:5");
+    parseObjectLiteral("keyonly, 'key:quoted', key:, {nokey: 4}");
     ```
 
     ```
-    [ ["malformed1",null], ["mal:formed2",null], ["good","3"], ["good5","5"] ]
+    [ ["keyonly",undefined], ["key:quoted",undefined], ["key",undefined], [undefined,"{nokey:4}"] ]
     ```

@@ -2,7 +2,7 @@
 // Splits an object literal string into a set of top-level key-value pairs
 // (c) Michael Best (https://github.com/mbest)
 // License: MIT (http://www.opensource.org/licenses/mit-license.php)
-// Version 2.0.2
+// Version 2.1.0
 
 // https://github.com/umdjs/umd
 // Support AMD, Node.js, and globals
@@ -44,8 +44,8 @@
         token = RegExp(stringDouble + '|' + stringSingle + '|' + stringRegexp + '|' + everyThingElse + '|' + oneNotSpace, 'g'),
 
         // Match end of previous token to determine whether a slash is a division or regex.
-        divisionLookBehind = /[\])A-Za-z0-9_$]$/,
-        keywordRegexLookBehind = /(in|return|typeof)$/;
+        divisionLookBehind = /[\])"'A-Za-z0-9_$]+$/,
+        keywordRegexLookBehind = {'in':1,'return':1,'typeof':1};
 
     function trim(string) {
         return string == null ? '' :
@@ -65,7 +65,7 @@
         // Split into tokens
         var result = [],
             toks = str.match(token),
-            key, values, depth = 0;
+            key, values = [], depth = 0;
 
         if (toks) {
             // Append a comma so that we don't need a separate code block to deal with the last item
@@ -76,19 +76,26 @@
                 // A comma signals the end of a key/value pair if depth is zero
                 if (c === 44) { // ","
                     if (depth <= 0) {
-                        if (key)
-                            result.push([key, values ? values.join('') : undefined]);
-                        key = values = depth = 0;
+                        if (!key && values.length === 1) {
+                            key = values.pop();
+                        }
+                        result.push([key, values.length ? values.join('') : undefined]);
+                        key = undefined;
+                        values = [];
+                        depth = 0;
                         continue;
                     }
                 // Simply skip the colon that separates the name and value
                 } else if (c === 58) { // ":"
-                    if (!values)
+                    if (!depth && !key && values.length === 1) {
+                        key = values.pop();
                         continue;
+                    }
                 // A set of slashes is initially matched as a regular expression, but could be division
                 } else if (c === 47 && i && tok.length > 1) {  // "/"
                     // Look at the end of the previous token to determine if the slash is actually division
-                    if (divisionLookBehind.test(toks[i-1]) && !keywordRegexLookBehind.test(toks[i-1])) {
+                    var match = toks[i-1].match(divisionLookBehind);
+                    if (match && !keywordRegexLookBehind[match[0]]) {
                         // The slash is actually a division punctuator; re-parse the remainder of the string (not including the slash)
                         str = str.substr(str.indexOf(tok) + 1);
                         toks = str.match(token);
@@ -102,17 +109,11 @@
                     ++depth;
                 } else if (c === 41 || c === 125 || c === 93) { // ')', '}', ']'
                     --depth;
-                // The key must be a single token; if it's a string, trim the quotes
-                } else if (!key && !values) {
-                    key = (c === 34 || c === 39) // '"', "'"
-                        ? tok.slice(1, -1)
-                        : tok;
-                    continue;
+                // The key will be the first token; if it's a string, trim the quotes
+                } else if (!key && !values.length && (c === 34 || c === 39)) { // '"', "'"
+                    tok = tok.slice(1, -1);
                 }
-                if (values)
-                    values.push(tok);
-                else
-                    values = [tok];
+                values.push(tok);
             }
         }
         return result;
