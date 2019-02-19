@@ -1,0 +1,21 @@
+{
+  "name": "object-literal-parse",
+  "version": "2.1.0",
+  "description": "Splits an object literal string into a set of top-level key-value pairs",
+  "main": "js-object-literal-parse.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mbest/js-object-literal-parse.git"
+  },
+  "keywords": [
+    "object-literal",
+    "object",
+    "parser"
+  ],
+  "author": "Michael Best <mbest@dasya.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mbest/js-object-literal-parse/issues"
+  },
+  "homepage": "https://github.com/mbest/js-object-literal-parse#readme"
+}
