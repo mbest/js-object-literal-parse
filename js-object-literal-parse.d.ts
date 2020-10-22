@@ -1,4 +1,4 @@
-declare module 'js-object-literal-parse' {
+declare module 'object-literal-parse' {
   const parseObjectLiteral: (literal: string) => [string, string | undefined][];
   export default parseObjectLiteral;
 }
