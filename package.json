@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "description": "Splits an object literal string into a set of top-level key-value pairs",
   "main": "js-object-literal-parse.js",
+  "module": "js-object-literal-parse.mjs",
   "types": "js-object-literal-parse.d.js",
   "repository": {
     "type": "git",
