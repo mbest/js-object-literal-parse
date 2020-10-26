@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/mbest/js-object-literal-parse/issues"
   },
-  "homepage": "https://github.com/mbest/js-object-literal-parse#readme"
+  "homepage": "https://github.com/mbest/js-object-literal-parse#readme",
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  }
 }
