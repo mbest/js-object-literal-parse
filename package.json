@@ -2,9 +2,9 @@
   "name": "object-literal-parse",
   "version": "2.1.0",
   "description": "Splits an object literal string into a set of top-level key-value pairs",
-  "main": "js-object-literal-parse.js",
-  "module": "js-object-literal-parse.mjs",
-  "types": "js-object-literal-parse.d.js",
+  "main": "dist/object-literal-parse.js",
+  "module": "dist/object-literal-parse.mjs",
+  "types": "dist/object-literal-parse.d.ts",
   "scripts": {
     "build": "tsc --module commonjs && rollup -c rollup.config.ts"
   },
