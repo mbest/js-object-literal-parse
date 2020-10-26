@@ -3,25 +3,25 @@
  * @param objectLiteralString - String to parse
  */
 const parseObjectLiteral = (
-  objectLiteralString: string,
+  objectLiteralString: string
 ): [string, string | undefined][] => {
   const stringDouble = '"(?:[^"\\\\]|\\\\.)*"';
   const stringSingle = "'(?:[^'\\\\]|\\\\.)*'";
-  const stringRegexp = '/(?:[^/\\\\]|\\\\.)*/w*';
-  const specials = ',"\'{}()/:[\\]';
-  const everyThingElse = '[^\\s:,/][^' + specials + ']*[^\\s' + specials + ']';
-  const oneNotSpace = '[^\\s]';
+  const stringRegexp = "/(?:[^/\\\\]|\\\\.)*/w*";
+  const specials = ",\"'{}()/:[\\]";
+  const everyThingElse = "[^\\s:,/][^" + specials + "]*[^\\s" + specials + "]";
+  const oneNotSpace = "[^\\s]";
   const token = RegExp(
     stringDouble +
-      '|' +
+      "|" +
       stringSingle +
-      '|' +
+      "|" +
       stringRegexp +
-      '|' +
+      "|" +
       everyThingElse +
-      '|' +
+      "|" +
       oneNotSpace,
-    'g',
+    "g"
   );
   const divisionLookBehind = /[\])"'A-Za-z0-9_$]+$/;
   const keywordRegexLookBehind = { in: 1, return: 1, typeof: 1 };
@@ -33,7 +33,7 @@ const parseObjectLiteral = (
   let values = [];
   let depth = 0;
   if (toks) {
-    toks.push(',');
+    toks.push(",");
     for (let i = 0, tok: string; (tok = toks[i]); ++i) {
       const c = tok.charCodeAt(0);
       if (c === 44) {
@@ -41,7 +41,7 @@ const parseObjectLiteral = (
           if (!key && values.length === 1) {
             key = values.pop();
           }
-          result.push([key, values.length ? values.join('') : undefined]);
+          result.push([key, values.length ? values.join("") : undefined]);
           key = undefined;
           values = [];
           depth = 0;
@@ -57,9 +57,9 @@ const parseObjectLiteral = (
         if (match && !keywordRegexLookBehind[match[0]]) {
           str = str.substr(str.indexOf(tok) + 1);
           toks = str.match(token);
-          toks.push(',');
+          toks.push(",");
           i = -1;
-          tok = '/';
+          tok = "/";
         }
       } else if (c === 40 || c === 123 || c === 91) {
         ++depth;
