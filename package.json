@@ -6,7 +6,7 @@
   "module": "js-object-literal-parse.mjs",
   "types": "js-object-literal-parse.d.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,13 @@
   },
   "homepage": "https://github.com/mbest/js-object-literal-parse#readme",
   "devDependencies": {
+    "lodash.camelcase": "^4.3.0",
+    "rollup": "^2.32.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.28.0",
     "typescript": "^4.0.3"
   }
 }
