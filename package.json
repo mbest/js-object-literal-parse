@@ -5,6 +5,9 @@
   "main": "js-object-literal-parse.js",
   "module": "js-object-literal-parse.mjs",
   "types": "js-object-literal-parse.d.js",
+  "scripts": {
+    "build": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mbest/js-object-literal-parse.git"
