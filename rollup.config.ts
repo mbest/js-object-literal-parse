@@ -10,7 +10,7 @@ const pkg = require("./package.json");
 const libraryName = "object-literal-parse";
 
 export default {
-  input: "js-object-literal-parse.ts",
+  input: "object-literal-parse.ts",
   output: [
     {
       file: pkg.main,
@@ -22,7 +22,7 @@ export default {
   ],
   external: [],
   watch: {
-    include: "js-object-literal-parse.ts",
+    include: "object-literal-parse.ts",
   },
   plugins: [
     json(),
